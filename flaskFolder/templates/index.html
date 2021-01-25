@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Corona statistics</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <style>
+      div {
+        width: 400px;
+        height: 400px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Corona Statistics</h1>
+    <h3>Select your country</h3>
+    <form method="post" action="/">
+      <select name="country1" id="country1">
+        {% for item in listCountries%}
+        <option value="{{item.code}}" {% if country1 == item.code %}selected{% endif %}>{{item.abr}}</option>
+        {% endfor %}
+      </select>
+      <select name="country2" id="country2">
+        {% for item in listCountries%}
+        <option value="{{item.code}}" {% if country2 == item.code %}selected{% endif %}>{{item.abr}}</option>
+        {% endfor %}
+      </select>
+      <select name="country3" id="country3">
+        {% for item in listCountries%}
+        <option value="{{item.code}}" {% if country3 == item.code %}selected{% endif %}>{{item.abr}}</option>
+        {% endfor %}
+      </select>
+      <input type="submit" value="Ok" />
+    </form>
+    <div>
+      <h2>Corona cases : {{country1}} {{country2}} {{country3}}</h2>
+      <canvas id="myChart" width="400" height="400"></canvas>
+
+      <h2>Corona deaths : {{country1}} {{country2}} {{country3}}</h2>
+      <canvas id="myChart2" width="400" height="400"></canvas>
+    </div>
+    <script>
+      //Recuperation des dates
+      var listDates = {{listDates|safe}}
+      //Recuperation Country1
+      var listCountry1 = {{listCountry1|safe}}
+      let casses1 = listCountry1.map(({cases})=>cases)
+      let deaths1 = listCountry1.map(({deaths})=>deaths)
+      //Recuperation Country2
+      var listCountry2 = {{listCountry2|safe}}
+      let casses2 = listCountry2.map(({cases})=>cases)
+      let deaths2 = listCountry2.map(({deaths})=>deaths)
+      //Recuperation Country3
+      var listCountry3 = {{listCountry3|safe}}
+      let casses3 = listCountry3.map(({cases})=>cases)
+      let deaths3 = listCountry3.map(({deaths})=>deaths)
+      var ctx = document.getElementById('myChart').getContext('2d');
+      var myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+              labels: listDates,
+              datasets: [
+                  {
+                      label: '{{country1}}',
+                      data: casses1,
+                      fill: false,
+                      backgroundColor:'rgba(255, 99, 132, 1)',
+                      borderColor: 'rgba(255, 99, 132, 1)',
+                      borderWidth: 1
+                  },
+                  {
+                      label: '{{country2}}',
+                      data: casses2,
+                      fill: false,
+                      backgroundColor:'rgba(54, 162, 235, 1)',
+                      borderColor: 'rgba(54, 162, 235, 1)',
+                      borderWidth: 1
+                  },
+                  {
+                      label: '{{country3}}',
+                      data: casses3,
+                      fill: false,
+                      backgroundColor:'rgba(75, 192, 192, 1)',
+                      borderColor: 'rgba(75, 192, 192, 1)',
+                      borderWidth: 1
+                  }
+              ]
+          },
+      });
+
+      var ctx2 = document.getElementById('myChart2').getContext('2d');
+      var myChart2 = new Chart(ctx2, {
+          type: 'line',
+          data: {
+              labels: listDates,
+              datasets: [
+                  {
+                      label: '{{country1}}',
+                      data: deaths1,
+                      fill: false,
+                      backgroundColor:'rgba(255, 99, 132, 1)',
+                      borderColor: 'rgba(255, 99, 132, 1)',
+                      borderWidth: 1
+                  },
+                  {
+                      label: '{{country2}}',
+                      data: deaths2,
+                      fill: false,
+                      backgroundColor:'rgba(54, 162, 235, 1)',
+                      borderColor: 'rgba(54, 162, 235, 1)',
+                      borderWidth: 1
+                  },
+                  {
+                      label: '{{country3}}',
+                      data: deaths3,
+                      fill: false,
+                      backgroundColor:'rgba(75, 192, 192, 1)',
+                      borderColor: 'rgba(75, 192, 192, 1)',
+                      borderWidth: 1
+                  }
+              ]
+          },
+      });
+    </script>
+  </body>
+</html>
